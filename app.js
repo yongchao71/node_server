@@ -6,7 +6,11 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var resHeader=require('./config/resHeader');
 var registorRoutes=require("./config/registorRoutes");
+const log4js= require('./utils/loger');
+const webrequest = log4js.loger("webrequest");
+const errorlogger = log4js.loger('error');
 var app = express();
+log4js.useLogger(app,webrequest);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -33,7 +37,7 @@ app.use(function(err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   res.locals.messageAA ="这是一个错误的请求";
-  console.log("get code error-----");
+  errorlogger.error("get code error-----");
   // render the error page
   res.status(err.status || 500);
   res.render('error');
