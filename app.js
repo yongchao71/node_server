@@ -3,6 +3,7 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var session = require('express-session');
 var bodyParser = require('body-parser');
 var resHeader=require('./config/resHeader');
 var registorRoutes=require("./config/registorRoutes");
@@ -22,22 +23,40 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(resHeader);
-registorRoutes(app);
-// catch 404 and forward to error handler
+
+app.use(session({
+    name:"aiychao",
+    secret: 'sessiontest',
+    resave: true,
+    saveUninitialized:true
+}));
+
+/**
+ * 请求全局过滤
+ */
 app.use(function(req, res, next) {
-  console.log("ffffffffffffffffff--------------");
+  next();
+});
+
+registorRoutes(app);
+/**
+ * 页面不存在
+ */
+app.use(function(req, res, next) {
   var err = new Error('Not Found');
+  console.log("-------------");
   err.status = 404;
   next(err);
 });
 
 // error handler
 app.use(function(err, req, res, next) {
+  //console.log(err);
+  errorlogger.error(req.method,req.url,err.status);
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-  res.locals.messageAA ="这是一个错误的请求";
-  errorlogger.error("get code error-----");
+  errorlogger.error(err);
   // render the error page
   res.status(err.status || 500);
   res.render('error');

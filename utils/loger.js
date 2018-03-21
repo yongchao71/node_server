@@ -1,3 +1,9 @@
+/*
+ * @Author: ZXY 
+ * @Date: 2018-03-20 13:39:28 
+ * @Last Modified by: ZXY
+ * @Last Modified time: 2018-03-20 13:40:32
+ */
 const log4js = require('log4js')
 var path=require('path');
 var logInfoPath=path.join(__dirname,'./../public/logs');
