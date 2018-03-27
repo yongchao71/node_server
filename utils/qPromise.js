@@ -2,7 +2,7 @@
  * @Author: ZXY 
  * @Date: 2018-03-21 09:14:53 
  * @Last Modified by: ZXY
- * @Last Modified time: 2018-03-23 14:34:09
+ * @Last Modified time: 2018-03-27 09:28:19
  */
 
 var Q = require("q");
@@ -51,10 +51,10 @@ function qPromise(oParams={}){
     loger.info(options.url,options.body);
     request(options , function(error , response , body){
         if(error){
-            deferred.resolve(error);
+            deferred.resolve([response,CONSTANT.errorCode.requestError]);
         }
         else{
-            deferred.resolve(body);
+            deferred.resolve([response,body]);
         }
     });
     return deferred.promise;
