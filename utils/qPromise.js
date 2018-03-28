@@ -1,81 +1,45 @@
 /*
  * @Author: ZXY 
- * @Date: 2018-03-21 09:14:53 
- * @Last Modified by: ZXY
- * @Last Modified time: 2018-03-27 09:28:19
+ * @Date: 2018-03-28 21:55:32 
+ * @Last Modified by: 
+ * @Last Modified time: 2018-03-28 22:05:56
  */
 
-var Q = require("q");
-var request = require("request");
-var loger=request("./loger.js");
-var cUtils=require("./cUtils");
-var CONSTANT=require("../config/constant");
-const util = require("util");
-function requestUrl(url) {
-    return Q.Promise(function(resolve, reject, notify) {
-        request(url, function (error, response, body) {
-            if(error){
-                reject(error);
-            }else{
-                if (!error && response.statusCode == 200) {
-                    resolve(body);
-                }
-            }
-        })
-    });
-}
-function createPromise(url){
-    var deferred = Q.defer();
-    request(url , function(err , response , body){
-        console.log("requested "+url);
-        if(err){
-            deferred.reject(err);
-        }        
-        else{
-            deferred.resolve(body);
-        }
-    });
-    return deferred.promise;
-}
-function qPromise(oParams={}){
-    var deferred = Q.defer();
-    let options={
-        //url:oParams.url,
-        method:"POST", 
-        headers: {
-            "content-type": "application/json;charset=UTF-8",
-        },
-       //body:JSON.stringify(arg.data)
-    };
-    cUtils.extend(options,oParams);
-    loger.info(options.url,options.body);
-    request(options , function(error , response , body){
-        if(error){
-            deferred.resolve([response,CONSTANT.errorCode.requestError]);
-        }
-        else{
-            deferred.resolve([response,body]);
-        }
-    });
-    return deferred.promise;
-
+var Q = require('q');
+/**
+ * Q.将数据封装成promise对象
+ * @param {任意参数} args 
+ */
+let Qobj=function(args){
+    return Q(args);
 };
-
-function wxPromise(fn) {
-    return function (obj = {}) {
-      return new Promise((resolve, reject) => {
-        obj.success = function (res) {
-          resolve(res);
-        }
-        obj.fail = function (res) {
-          //reject(res);
-          resolve(res);
-        }
-        fn(obj);
-      })
-    }
-  };
-
+/**
+ * Q.fcall:将同步方法封装成promise
+ * @param {同步方法} fn 
+ */
+let Qfcall=function(fn){
+    return Q.fcall(fn);
+};
+/**
+ * Q.nfcall:将异步方法封装成promise，例子：Q.nfcall(fs.readFile,filename,encoding)
+ * @param {异步方法} fn 
+ * @param {异步方法参数，不定长度} args 
+ */
+let Qnfcall=function(fn,...args){
+    return Q.nfcall(fn,args);
+}; 
+/**
+ *  Q.all:将一批promise封装成一个promise
+ * @param {promise数组} aPromise 
+ * 返回then(data) 执行数组
+ */
+let QAll=function(...aPromise){
+    //let aPromise =Array.prototype.slice.call(arguments);
+    return Q.all(aPromise);
+}
 module.exports={
-    qPromise:qPromise
+    Qobj:Qobj,
+    Qfcall:Qfcall,
+    Qnfcall:Qnfcall,
+    QAll:QAll
 }

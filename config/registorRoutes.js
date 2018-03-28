@@ -1,6 +1,8 @@
 /*
  * @Author: ZXY 
- * @Date: 2018-03-18 22:16:52 
+ * @Date: 2018-03-28 22:25:42 
+ * @Last Modified by:    
+ * @Last Modified time: 2018-03-28 22:25:42 
  */
 function registorRoutes(app) {
     var requires = [
