@@ -44,7 +44,6 @@ registorRoutes(app);
  */
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
-  console.log("-------------");
   err.status = 404;
   next(err);
 });
