@@ -2,7 +2,7 @@
  * @Author: ZXY 
  * @Date: 2018-03-21 09:14:53 
  * @Last Modified by: ZXY
- * @Last Modified time: 2018-04-15 01:35:24
+ * @Last Modified time: 2018-04-15 11:50:31
  */
 
 var Q = require("q");
@@ -12,21 +12,17 @@ var request = require("request");
 var loger=require("./loger").loger();
 var cUtils=require("./comUtils");
 var CONSTANT=require("../config/constant");
-
-function Get(oParams={}){
-    var deferred = Q.defer();
-    
-    let options={
-        //url:oParams.url,
-        method:"GET", 
-        headers: {
-            "content-type": "application/json;charset=UTF-8",
-        },
-       //body:JSON.stringify(arg.data)
-    };
-    cUtils.extend(options,oParams);
-    loger.info(options.url,options.body);
-    request(options , function(error , response , body){
+/**
+ * get请求
+ * @param {请求地址，或者请求对象} gurl 
+ * @param {请求数据，或者空值} gdata 
+ */
+function Get(gurl,gdata){
+    let deferred = Q.defer();
+   let params=gdata? querystring.stringify(gdata):"";
+     gurl=`${gurl}?${params}`
+    loger.info("-------get url-------",gurl);
+    request.get(gurl , function(error , response , body){
         if(error){
             deferred.resolve([response,CONSTANT.errorCode.requestError]);
         }
@@ -36,21 +32,23 @@ function Get(oParams={}){
     });
     return deferred.promise;
 };
-
-function Post(oParams={}){
+/**
+ * post请求
+ * @param {请求地址获取请求对象} purl 
+ * @param {请求数据} pdata 
+ */
+function Post(purl,pdata={}){
     var deferred = Q.defer();
-    let options={
-        //url:oParams.url,
-        formData:{},
-        method:"POST", 
-        headers: {
-            "content-type": "application/json;charset=UTF-8",
-        },
-       //body:JSON.stringify(arg.data)
-    };
-    cUtils.extend(options,oParams);
-    loger.info(options.url,options.body);
-    request(options , function(error , response , body){
+    let iType=typeof(purl);
+    let options={};
+    if(iType=="object"){
+        cUtils.extend(options,purl);
+    }else{
+        options.url=purl;
+        options.form=pdata;
+    }
+    loger.info("----------------------->", options);
+    request.post(options, function(error , response , body){
         if(error){
             deferred.resolve([response,CONSTANT.errorCode.requestError]);
         }
@@ -60,6 +58,9 @@ function Post(oParams={}){
     });
     return deferred.promise;
 };
+/**
+ * 请求方法，可以接受任何请求方式
+ */
 function Request(){
     let aParams=Array.prototype.slice.call(arguments);
     let oParams=resolveParams(aParams);

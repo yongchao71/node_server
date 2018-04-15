@@ -2,7 +2,7 @@
  * @Author: ZXY 
  * @Date: 2018-03-20 13:41:18 
  * @Last Modified by: ZXY
- * @Last Modified time: 2018-04-15 01:32:37
+ * @Last Modified time: 2018-04-15 11:46:30
  */
 var CONFIGAPI=require("./../config/remoteAPI");
 var httpRequest=require("./../utils/httpRequest");
@@ -30,7 +30,7 @@ function test(req,res,next){
     let getUrl2=CONFIGAPI.product.list;
     let postUrl=`${CONFIGAPI.users.add}?unionid=oDOgS0kCV5its31fROZtbdqcpMAE&test=測試`;
     let oParams={
-        url:getUrl,
+        //url:getUrl,
         url:postUrl,
         method:"POST",
         body:{
@@ -43,7 +43,7 @@ function test(req,res,next){
     //     console.log("result-------------",result[1]);
     //     res.send(result[1]);
     // });
-    httpRequest.Request(postUrl,"post",pdata).then(result=>{
+    httpRequest.Get(getUrl2,pdata).then(result=>{
         console.log("result-------------",typeof(result),Array.isArray(result),result.length);
         console.log("result-------------",result[1]);
         res.send(result[1]);
