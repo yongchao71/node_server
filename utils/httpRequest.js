@@ -2,7 +2,7 @@
  * @Author: ZXY 
  * @Date: 2018-03-21 09:14:53 
  * @Last Modified by: ZXY
- * @Last Modified time: 2018-04-15 01:35:24
+ * @Last Modified time: 2018-04-15 11:46:02
  */
 
 var Q = require("q");
@@ -13,20 +13,12 @@ var loger=require("./loger").loger();
 var cUtils=require("./comUtils");
 var CONSTANT=require("../config/constant");
 
-function Get(oParams={}){
-    var deferred = Q.defer();
-    
-    let options={
-        //url:oParams.url,
-        method:"GET", 
-        headers: {
-            "content-type": "application/json;charset=UTF-8",
-        },
-       //body:JSON.stringify(arg.data)
-    };
-    cUtils.extend(options,oParams);
-    loger.info(options.url,options.body);
-    request(options , function(error , response , body){
+function Get(gurl,gdata){
+    let deferred = Q.defer();
+   let params=gdata? querystring.stringify(gdata):"";
+     gurl=`${gurl}?${params}`
+    loger.info("-------get url-------",gurl);
+    request.get(gurl , function(error , response , body){
         if(error){
             deferred.resolve([response,CONSTANT.errorCode.requestError]);
         }
@@ -37,20 +29,18 @@ function Get(oParams={}){
     return deferred.promise;
 };
 
-function Post(oParams={}){
+function Post(purl,pdata={}){
     var deferred = Q.defer();
-    let options={
-        //url:oParams.url,
-        formData:{},
-        method:"POST", 
-        headers: {
-            "content-type": "application/json;charset=UTF-8",
-        },
-       //body:JSON.stringify(arg.data)
-    };
-    cUtils.extend(options,oParams);
-    loger.info(options.url,options.body);
-    request(options , function(error , response , body){
+    let iType=typeof(purl);
+    let options={};
+    if(iType=="object"){
+        cUtils.extend(options,purl);
+    }else{
+        options.url=purl;
+        options.form=pdata;
+    }
+    loger.info("----------------------->", options);
+    request.post(options, function(error , response , body){
         if(error){
             deferred.resolve([response,CONSTANT.errorCode.requestError]);
         }
