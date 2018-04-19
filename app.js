@@ -1,3 +1,9 @@
+/*
+ * @Author: ZXY 
+ * @Date: 2018-04-15 12:02:01 
+ * @Last Modified by:   ZXY 
+ * @Last Modified time: 2018-04-15 12:02:01 
+ */
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -44,7 +50,6 @@ registorRoutes(app);
  */
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
-  console.log("-------------");
   err.status = 404;
   next(err);
 });

@@ -2,7 +2,7 @@
  * @Author: ZXY 
  * @Date: 2018-03-21 12:16:25 
  * @Last Modified by: ZXY
- * @Last Modified time: 2018-03-21 16:07:14
+ * @Last Modified time: 2018-04-15 00:11:40
  */
 /**
  * 对象深拷贝
@@ -16,6 +16,7 @@ var deepCopy= function(oSource,oDestination){
         return oSource;
     } 
     for (let key in oSource) {
+        //console.log("oSource================>",oSource,oSource.hasOwnProperty);
         if (!oSource.hasOwnProperty(key)) {
            continue;
         }

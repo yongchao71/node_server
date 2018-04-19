@@ -5,21 +5,35 @@
  */
 
 var fs=require('fs');
-function readJSON(path) {
-    if (fs.existsSync(path)) {
-        return JSON.parse(fs.readFileSync(path));
-    }else {
-        return {};
+/**
+ * 文件读取 同步
+ * @param {文件路径} path 
+ * @param {是否是json} isJson 
+ */
+function readFile(path,isJson) {
+    let result="";    
+    if(!fs.existsSync(path)){
+        return result;
     }
+    result=fs.readFileSync(path);
+    if(isJson){
+        return JSON.parse(result);
+    }
+    return result;
 }
-function writeJSON(path,jsonstr) {
-    if (fs.existsSync(path)) {
-        fs.writeFileSync(path,jsonstr);
-    } else {
-        console.log(path+ " Not Found!");
-    }
+/**
+ * 文件写入同步
+ * @param {文件路径} path 
+ * @param {写入的数据} jsonstr 
+ */
+function writeFile(path,data) {
+//    if (fs.existsSync(path)) {
+        fs.writeFileSync(path,data);
+    // } else {
+    //     console.log(path+ " Not Found!");
+    // }
 }
 module.exports = {
-    readJSON:readJSON,
-    writeJSON:writeJSON
+    readFile:readFile,
+    writeFile:writeFile
 };
