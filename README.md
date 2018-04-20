@@ -1,2 +1,2 @@
 # backend_node
-nodejs中间件，承接后台接口与前台页面。
+nodejs后端操作，集成mysql，日志记录。
