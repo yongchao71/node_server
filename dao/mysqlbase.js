@@ -1,17 +1,31 @@
-var mysql      = require('mysql');
+/*
+ * @Author: ZXY 
+ * @Date: 2018-04-20 13:03:36 
+ * @Last Modified by: ZXY
+ * @Last Modified time: 2018-04-20 16:13:37
+ */
+
+var mysql= require('mysql');
 var Q = require('q');
+const log4js= require('../utils/loger');
+const loger = log4js.loger("webrequest");
+const errorlogger = log4js.loger('error');
 let sqlConfig=require('../config/mysqlconfig');
 
 var pool = mysql.createPool(sqlConfig.serverOne);
 
-let fQuery=function(query,params={}){
+let fQuery_bak=function(query,params={}){
     let deferred = Q.defer();
     pool.getConnection(function(poolerr,conn){
         if(poolerr){
+            errorlogger.error(poolerr);
             deferred.resolve(poolerr);
         }else{
+            loger.info("----query------->",query);
+            loger.info("----params------->",params);
             conn.query(query,params,function(queryError,rows,fields){
                 if(queryError){
+                    errorlogger.error(queryError);
                     deferred.resolve(queryError);
                 }else{
                     let resultStr=JSON.stringify(rows); 
@@ -24,33 +38,47 @@ let fQuery=function(query,params={}){
     });
     return deferred.promise;
 };
-
-
-
-
-let connection = mysql.createConnection(sqlConfig.serverOne);
-function selectdata(query,params={}){
+let fQuery=function(query,params={}){
     let deferred = Q.defer();
-    //connection.connect();
-    connection.query(query,params,function(err, rows, fields) {
-        //console.log("fields-----------------------",fields);
-        if (err) {
-            deferred.resolve(err);
+    pool.getConnection(function(poolerr,conn){
+        if(poolerr){
+            errorlogger.error(poolerr);
+            deferred.resolve(poolerr);
         }else{
-            let resultStr=JSON.stringify(rows); 
-            let rowdata = JSON.parse(resultStr);
-            deferred.resolve(rowdata);
+            let sql=mysql.format(query,params);
+            loger.info("----query------->",query);
+            loger.info("----params------->",params);
+            loger.info("----sql------->",sql);
+            conn.query(sql,function(queryError,rows,fields){
+                if(queryError){
+                    errorlogger.error(queryError);
+                    deferred.resolve(queryError);
+                }else{
+                    let resultStr=JSON.stringify(rows); 
+                    let rowdata = JSON.parse(resultStr);
+                    let reg=/^\s*select/i;
+                    let itest=reg.test(query);
+                    if(itest){
+                        deferred.resolve(rowdata);
+                    }else{
+                        deferred.resolve(rowdata.affectedRows);
+                    }
+
+                }
+                conn.release();
+            });
         }
-        connection.end(function(err){
-        });
     });
     return deferred.promise;
-}
-let params=["name","email",{id:5}];
-let query="select * from users";
-query="SELECT ?,? FROM users WHERE ?";
+};
+module.exports=fQuery;
 
-selectdata(query,params).then((result) => {
+//inster
+return false;
+let iparams=[["loginname","name","email","address","age"],["让退","dfg","434123@123.com","AAA",23]];
+//let iquery="insert into users(??) values (?)";
+let iquery="select  *  from users"
+fQuery(iquery,iparams).then((result) => {
     console.log("stype--2222-----------");
     console.log("-----------",result);
     // result.forEach(element => {
@@ -59,7 +87,13 @@ selectdata(query,params).then((result) => {
     //     console.log("---=====================---");
     // });
 });
-selectdata(query,params).then((result) => {
+
+
+let params=["name","email",{id:1}];
+let query="select * from users";
+query="SELECT ?,? FROM users WHERE ?";
+return false;
+fQuery(query,params).then((result) => {
     console.log("stype--2222-----------");
     console.log("-----------",result);
     // result.forEach(element => {
