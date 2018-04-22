@@ -2,7 +2,7 @@
  * @Author: ZXY 
  * @Date: 2018-04-20 13:03:20 
  * @Last Modified by: ZXY
- * @Last Modified time: 2018-04-20 16:12:21
+ * @Last Modified time: 2018-04-22 15:52:19
  */
 
 var fQuery=require("./mysqlbase");
@@ -109,16 +109,21 @@ function select_items(table,fields,oWhere,orderbyOrlimit){
       let query=`select ?? from  ${table}`
       if(oWhere){ 
         query=`${query} where `
-        let oItem=Object.keys(oWhere);
-        let iLength=oItem.length-1;
-        oItem.forEach(function(key,index){ 
-            params.push(oWhere[key]);
-            if(index!=iLength){
-                query+=`${key}=? and `;
-            }else{
-                query+=`${key}=? `;
-            }
-       });
+        if(typeof(oWhere)=="string"){
+            query=`${query}  ${oWhere}`
+        }else{
+            let oItem=Object.keys(oWhere);
+            let iLength=oItem.length-1;
+            oItem.forEach(function(key,index){ 
+                params.push(oWhere[key]);
+                if(index!=iLength){
+                    query+=`${key}=? and `;
+                }else{
+                    query+=`${key}=? `;
+                }
+           });
+        }
+
       }
       if(orderbyOrlimit){
         query=`${query} ${orderbyOrlimit} `;
