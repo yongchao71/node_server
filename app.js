@@ -1,8 +1,8 @@
 /*
  * @Author: ZXY 
  * @Date: 2018-04-15 12:02:01 
- * @Last Modified by:   ZXY 
- * @Last Modified time: 2018-04-15 12:02:01 
+ * @Last Modified by: ZXY
+ * @Last Modified time: 2018-04-26 10:07:12
  */
 var express = require('express');
 var path = require('path');
@@ -16,6 +16,9 @@ var registorRoutes=require("./config/registorRoutes");
 const log4js= require('./utils/loger');
 const webrequest = log4js.loger("webrequest");
 const errorlogger = log4js.loger('error');
+
+const seq=require("./dao/sequelize/sqBase");
+
 var app = express();
 log4js.useLogger(app,webrequest);
 // view engine setup
