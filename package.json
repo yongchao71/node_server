@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "node ./bin/www  9000 dev",
-    "sit": "node ./bin/www 9001 sit",
-    "uat": "node ./bin/www 9002 uat",
-    "prod": "node ./bin/www 9003 prod",
+    "sit": "forever start ./bin/www 9001 sit",
+    "uat": "forever start ./bin/www 9002 uat",
+    "prod": "forever start ./bin/www 9003 prod",
+    "stop":"forever stop ./bin/www",
     "_COMMENT_": "_LOCALPORT_, _ENVIRONMENT_"
   },
   "dependencies": {
