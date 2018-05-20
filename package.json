@@ -7,7 +7,7 @@
     "sit": "forever start ./bin/www 9001 sit",
     "uat": "forever start ./bin/www 9002 uat",
     "prod": "forever start ./bin/www 9003 prod",
-    "stop":"forever stop ./bin/www",
+    "stop": "forever stop ./bin/www",
     "_COMMENT_": "_LOCALPORT_, _ENVIRONMENT_"
   },
   "dependencies": {
@@ -19,9 +19,12 @@
     "express-session": "^1.15.6",
     "log4js": "^2.5.3",
     "morgan": "~1.9.0",
+    "ms": "^2.1.1",
     "mysql": "^2.15.0",
+    "mysql2": "^1.5.3",
     "q": "^1.5.1",
     "request": "^2.85.0",
+    "sequelize": "^4.37.6",
     "serve-favicon": "~2.4.5"
   }
 }
