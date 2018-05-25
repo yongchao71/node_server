@@ -24,13 +24,14 @@ const Users = sequelize.define("users", {
 });
 
 
-let user={
-    Name:"ZXYY",
-    Address:"Beijing",
-    Email:"ddd@123.com",
-    Age:11
-}
+// let user={
+//     Name:"ZXYY",
+//     Address:"Beijing",
+//     Email:"ddd@123.com",
+//     Age:11
+// }
 
 module.exports={
-  Users:Users
+  Users:Users,
+  sequelize:sequelize
 }

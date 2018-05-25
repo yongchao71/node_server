@@ -2,7 +2,7 @@
  * @Author: ZXY 
  * @Date: 2018-04-15 12:02:01 
  * @Last Modified by: ZXY
- * @Last Modified time: 2018-04-26 10:07:12
+ * @Last Modified time: 2018-05-21 08:50:50
  */
 var express = require('express');
 var path = require('path');
@@ -27,8 +27,9 @@ app.set('view engine', 'ejs');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
+let upperBound = '50mb';
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({limit: upperBound, extended: true, parameterLimit: 100000000}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(resHeader);
