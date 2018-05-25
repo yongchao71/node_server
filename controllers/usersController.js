@@ -2,7 +2,7 @@
  * @Author: ZXY 
  * @Date: 2018-03-20 13:41:18 
  * @Last Modified by: ZXY
- * @Last Modified time: 2018-05-25 17:07:02
+ * @Last Modified time: 2018-05-25 20:19:00
  */
 var CONFIGAPI = require("./../config/remoteAPI");
 var httpRequest = require("./../utils/httpRequest");
@@ -17,16 +17,16 @@ function sequelizetest(req, res, next) {
 
     
 let user={
-    Name:"永",
+    Name:"sdf山东饭馆",
     Address:"Beijing111北京",
     Email:"EEE@123.com",
     Age:11
 }
 
-Users.create(user).then(result=>{
+Models.Users.create(user).then(result=>{
     loger.info("create users------------------",JSON.stringify(result));
 }).catch(e=>{
-    loger.error("create user error---------");
+    loger.error("create user error---------",e);
 });
 
     // Users.findAll({attributes:["Name","Age"]}) .then(result=>{

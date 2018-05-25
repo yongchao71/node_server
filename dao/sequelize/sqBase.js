@@ -1,7 +1,9 @@
 const Sequelize = require('sequelize');
+var loger=require('../../utils/loger').loger();
 const sequelize = new Sequelize('lecanyu', 'root', 'zxy1111', {
   host: 'localhost',
   dialect: 'mysql',
+  logging:function(sql){loger.info("==========>",sql)},
   pool: {
     max: 5,
     min: 0,
