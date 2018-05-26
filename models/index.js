@@ -13,5 +13,7 @@ fs.existsSync(daopath) && fs.readdirSync(daopath).map(item => {
         oModels[sName]=sequelize.import(jsPath);
     }
 });
-loger.info("index----------",oModels);
+loger.info("sequelize.models----------",sequelize.models);
+sequelize.models.Belone.belongsTo(sequelize.models.Users, { foreignKey: 'UserId' })
+
 module.exports=oModels;
