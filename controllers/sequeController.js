@@ -2,7 +2,7 @@
  * @Author: ZXY 
  * @Date: 2018-03-20 13:41:18 
  * @Last Modified by: ZXY
- * @Last Modified time: 2018-05-27 00:22:06
+ * @Last Modified time: 2018-05-27 15:55:30
  */
 var CONFIGAPI = require("./../config/remoteAPI");
 var httpRequest = require("./../utils/httpRequest");
@@ -10,7 +10,7 @@ var loger = require("../utils/loger").loger();
 var Models = require("../models/index");
 
 function detail(req, res, next) {
-    Models.Users.findOne().then(result => {
+    Models.User.findOne().then(result => {
         loger.info("Users-------------->", JSON.stringify(result));
     });
     res.send({ "user": "user result" });
@@ -24,7 +24,7 @@ function add(req, res, next) {
         Age: 11
     }
 
-    Models.Users.create(user).then(result => {
+    Models.User.create(user).then(result => {
         loger.info("create users------------------", JSON.stringify(result));
         res.send({ "user": result });
     }).catch(e => {
@@ -33,7 +33,7 @@ function add(req, res, next) {
     });
 }
 function update(req, res, next) {
-    Models.Users.update({
+    Models.User.update({
         LoginName: "登录名24352345"
     }, {
             where: {
@@ -57,13 +57,28 @@ function list(req, res, next) {
     //     res.send({ result: e });
     // });
 
-    Models.Belone.findAll({include:Models.Users}).then(result=>{
-        loger.info("belone result----------",JSON.stringify(result));
+    // Models.User.findAll({include:Models.Belone}).then(result=>{
+    //     loger.info("Users result----------",JSON.stringify(result));
+    // }).catch(e=>{
+    //     loger.error("e-----------------",e);
+    // });
+
+
+    
+    Models.User.findAll({include:Models.Role}).then(result=>{
+        loger.info("Users role result----------",JSON.stringify(result));
+    }).catch(e=>{
+        loger.error("e-----------------",e);
+    });
+
+    Models.Belone.findAll({include:Models.User}).then(result=>{
+       // loger.info("belone result----------",JSON.stringify(result));
         res.send({ result: result });
     }).catch(e=>{
         loger.error("e-----------------",e);
         res.send({ result: e });
     });
+
 
 
     // Models.Users.findAndCountAll({
@@ -82,7 +97,7 @@ function list(req, res, next) {
     // });
 }
 function remove(req, res, next) {
-    Models.Users.destroy({          where: {
+    Models.User.destroy({          where: {
         Id: 27
     }}).then(result => {
         loger.info("Users-------------->", JSON.stringify(result));
