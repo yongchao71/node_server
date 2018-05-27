@@ -14,6 +14,12 @@ fs.existsSync(daopath) && fs.readdirSync(daopath).map(item => {
     }
 });
 loger.info("sequelize.models----------",sequelize.models);
-sequelize.models.Belone.belongsTo(sequelize.models.Users, { foreignKey: 'UserId' })
+sequelize.models.Belone.belongsTo(sequelize.models.User, { foreignKey: 'UserId',targetKey:'Id'})
+
+sequelize.models.User.hasMany(sequelize.models.Belone, {foreignKey:'UserId', targetKey:'Id'});
+
+
+sequelize.models.User.belongsToMany(sequelize.models.Role, {through: 'UserRoles'});
+sequelize.models.Role.belongsToMany(sequelize.models.User, {through: 'UserRoles'});
 
 module.exports=oModels;

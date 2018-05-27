@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes)=> {
-    let Users=sequelize.define("Users", {
+    let User=sequelize.define("User", {
         Id:{type:DataTypes.INTEGER,field:"id",primaryKey:true,autoIncrement: true},
       LoginName:{type:DataTypes.STRING,field:"loginname"} ,
       Name:{type:DataTypes.STRING,field:"name"} ,
@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes)=> {
     },{
       timestamps: false,
       freezeTableName: true,
-      tableName: 'users'
+      tableName: 'user'
     })
-    return Users;
+    return User;
 }
