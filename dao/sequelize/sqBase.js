@@ -39,5 +39,6 @@ sequelize.authenticate().then(() => {
 
 module.exports={
  // Users:Users,
-  sequelize:sequelize
+  sequelize:sequelize,
+  Sequelize:Sequelize
 }
