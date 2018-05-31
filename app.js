@@ -2,7 +2,7 @@
  * @Author: ZXY 
  * @Date: 2018-04-15 12:02:01 
  * @Last Modified by: ZXY
- * @Last Modified time: 2018-05-21 08:50:50
+ * @Last Modified time: 2018-05-31 18:41:21
  */
 var express = require('express');
 var path = require('path');
@@ -13,6 +13,11 @@ var session = require('express-session');
 var bodyParser = require('body-parser');
 var resHeader=require('./config/resHeader');
 var registorRoutes=require("./config/registorRoutes");
+
+
+const jwt= require('jsonwebtoken');
+const expressJwt = require('express-jwt');
+
 const log4js= require('./utils/loger');
 const webrequest = log4js.loger("webrequest");
 const errorlogger = log4js.loger('error');
@@ -33,6 +38,32 @@ app.use(bodyParser.urlencoded({limit: upperBound, extended: true, parameterLimit
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(resHeader);
+
+//定义签名
+const secret = 'salt';
+//生成token
+const token = jwt.sign({
+    name: 123
+}, secret, {
+    expiresIn:  30 //秒到期时间
+});
+webrequest.info("token------------------",token);
+
+app.use(expressJwt ({
+  secret:  secret 
+}).unless({
+  path: ['/login', '/seque/list']  //除了这些地址，其他的URL都需要验证
+}));
+
+
+
+jwt.verify(token, secret, function (err, decoded) {
+  if (!err){
+    webrequest.info("token----decode--------------",decoded,decoded.name);  
+   }
+})
+
+
 
 app.use(session({
     name:"aiychao",
@@ -59,6 +90,7 @@ app.use(function(req, res, next) {
 });
 
 // error handler
+//拦截器
 app.use(function(err, req, res, next) {
   //console.log(err);
   errorlogger.error(req.method,req.url,err.status);
@@ -68,7 +100,10 @@ app.use(function(err, req, res, next) {
   errorlogger.error(err);
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  //res.render('error');
+    if (err.name === 'UnauthorizedError') {   
+        res.status(401).send('无效token');
+     }
 });
 
 module.exports = app;

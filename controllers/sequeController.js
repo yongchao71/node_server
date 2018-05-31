@@ -2,7 +2,7 @@
  * @Author: ZXY 
  * @Date: 2018-03-20 13:41:18 
  * @Last Modified by: ZXY
- * @Last Modified time: 2018-05-27 15:55:30
+ * @Last Modified time: 2018-05-29 16:12:23
  */
 var CONFIGAPI = require("./../config/remoteAPI");
 var httpRequest = require("./../utils/httpRequest");
@@ -62,10 +62,17 @@ function list(req, res, next) {
     // }).catch(e=>{
     //     loger.error("e-----------------",e);
     // });
+    let Op = Models.Sequelize.Op;
+    Models.Group.findAll({include:{model:Models.Group,include:{model:Models.Group}} ,where:{ParentId:{$eq: null}}}).then(result=>{
+        loger.info("Group result----------",JSON.stringify(result));
+    }).catch(e=>{
+        loger.error("Group---e-----------------",e);
+    });
 
-
+//Models.Role
     
-    Models.User.findAll({include:Models.Role}).then(result=>{
+    Models.User.findAll({include:[{model:Models.Role}],where:{Id:{$lt:5}},attributes: ["Name"]}).then(result=>{
+       // loger.info("---------------",Models.Sequelize.Op);
         loger.info("Users role result----------",JSON.stringify(result));
     }).catch(e=>{
         loger.error("e-----------------",e);
