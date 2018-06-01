@@ -12,8 +12,10 @@
     "_COMMENT_": "_LOCALPORT_, _ENVIRONMENT_"
   },
   "nodemonConfig": {
-    "ignore": ["logs/*.log","public/*","bootConfig.json"],
-    "delay": "2500"
+    "ignore": ["logs/*.log","public/*","bootConfig.json","node_modules/*"],
+    "watch": [],
+    "ext": "",
+    "delay":"1000"
   },
   "dependencies": {
     "body-parser": "~1.18.2",

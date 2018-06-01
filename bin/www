@@ -12,7 +12,6 @@ var path=require('path');
 var loger= require('./../utils/loger').loger();
  ///////////////////////////////////////////////////////////////
 //{"bootenv":"dev","serverport":8041,"defaultenv":"dev"}
-console.log("process.argv[2]--------------",process.argv[2]);
 let iRunPort=process.argv[2]||"9000"; //获取运行端口
 let sRunEnv=process.argv[3]||"dev"; //获取启动环境
 
