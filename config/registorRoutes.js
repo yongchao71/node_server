@@ -2,19 +2,19 @@
  * @Author: ZXY 
  * @Date: 2018-03-28 22:25:42 
  * @Last Modified by: ZXY
- * @Last Modified time: 2018-06-01 15:58:39
+ * @Last Modified time: 2018-06-01 22:28:30
  */
 function registorRoutes(app) {
     var requires = [
         {
-            root:"/",
-            require: '../routes/index'
+            root:"/demo",
+            require: '../controllers/demoController'
         },{
             root:"/user",
-            require: '../routes/user'
+            require: '../controllers/userController'
         },{
             root:"/seque",
-            require: '../routes/seque'
+            require: '../controllers/sequeController'
         }
     ];
 
