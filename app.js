@@ -2,7 +2,7 @@
  * @Author: ZXY 
  * @Date: 2018-04-15 12:02:01 
  * @Last Modified by: ZXY
- * @Last Modified time: 2018-06-01 13:06:42
+ * @Last Modified time: 2018-06-01 15:55:30
  */
 var express = require('express');
 var path = require('path');
@@ -47,13 +47,11 @@ const token = jwt.sign({
 }, secret, {
     expiresIn:  30 //秒到期时间
 });
-webrequest.info("token------  dddd-dghgh-----------",token);
-
-app.use(expressJwt ({
-  secret:  secret 
-}).unless({
-  path: ['/login', '/seque/list']  //除了这些地址，其他的URL都需要验证
-}));
+// app.use(expressJwt ({
+//   secret:  secret 
+// }).unless({
+//   path: ['/login', '/seque/list']  //除了这些地址，其他的URL都需要验证
+// }));
 
 
 

@@ -1,9 +1,10 @@
 /*
  * @Author: ZXY 
- * @Date: 2018-03-20 13:41:18 
- * @Last Modified by: ZXY
- * @Last Modified time: 2018-05-25 20:19:00
+ * @Date: 2018-06-01 15:43:54 
+ * @Last Modified by:   ZXY 
+ * @Last Modified time: 2018-06-01 15:43:54 
  */
+
 var CONFIGAPI = require("./../config/remoteAPI");
 var httpRequest = require("./../utils/httpRequest");
 var loger = require("../utils/loger").loger();
