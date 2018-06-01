@@ -2,7 +2,7 @@
  * @Author: ZXY 
  * @Date: 2018-03-20 13:41:18 
  * @Last Modified by: ZXY
- * @Last Modified time: 2018-05-29 16:12:23
+ * @Last Modified time: 2018-06-01 13:20:15
  */
 var CONFIGAPI = require("./../config/remoteAPI");
 var httpRequest = require("./../utils/httpRequest");
@@ -64,7 +64,7 @@ function list(req, res, next) {
     // });
     let Op = Models.Sequelize.Op;
     Models.Group.findAll({include:{model:Models.Group,include:{model:Models.Group}} ,where:{ParentId:{$eq: null}}}).then(result=>{
-        loger.info("Group result----------",JSON.stringify(result));
+        loger.info("Group result---1111-------",JSON.stringify(result));
     }).catch(e=>{
         loger.error("Group---e-----------------",e);
     });

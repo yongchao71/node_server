@@ -2,7 +2,7 @@
  * @Author: ZXY 
  * @Date: 2018-04-15 12:02:01 
  * @Last Modified by: ZXY
- * @Last Modified time: 2018-05-31 18:41:21
+ * @Last Modified time: 2018-06-01 13:06:42
  */
 var express = require('express');
 var path = require('path');
@@ -47,7 +47,7 @@ const token = jwt.sign({
 }, secret, {
     expiresIn:  30 //秒到期时间
 });
-webrequest.info("token------------------",token);
+webrequest.info("token------  dddd-dghgh-----------",token);
 
 app.use(expressJwt ({
   secret:  secret 
