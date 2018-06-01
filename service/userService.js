@@ -1,11 +1,19 @@
 var loger = require("../utils/loger").loger();
 var Models = require("../models/index");
-
+var BaseService=require("./BaseService");
 function detail() {
-    Models.User.findOne().then(result => {
-        loger.info("Users-------------->", JSON.stringify(result));
+    loger.info("BaseService------------------",BaseService);
+    
+    let User=new BaseService("User");
+    let Belone=new BaseService("Belone");
+    let Doctors=new BaseService("Doctors");
+    
+    Promise.all([Doctors.findByPrimary("4c7cbf30-4a90-11e8-9169-15f7b5ed5145"),User.findAll({where:{id:{$gt:21}},limit: 3})]).then(result=>{
+        loger.info("promise result-------------",JSON.stringify(result));
+    }).catch(e=>{
+        loger.error("search error-----------",e);
     });
- 
+    return Models.User.findOne({});
 }
 function add(req, res, next) {
     let user = {

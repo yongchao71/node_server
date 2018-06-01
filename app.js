@@ -2,7 +2,7 @@
  * @Author: ZXY 
  * @Date: 2018-04-15 12:02:01 
  * @Last Modified by: ZXY
- * @Last Modified time: 2018-06-01 15:55:30
+ * @Last Modified time: 2018-06-01 16:08:24
  */
 var express = require('express');
 var path = require('path');
@@ -57,7 +57,7 @@ const token = jwt.sign({
 
 jwt.verify(token, secret, function (err, decoded) {
   if (!err){
-    webrequest.info("token----decode--------------",decoded,decoded.name);  
+   // webrequest.info("token----decode--------------",decoded,decoded.name);  
    }
 })
 
