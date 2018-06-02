@@ -2,7 +2,7 @@
  * @Author: ZXY 
  * @Date: 2018-06-01 17:34:12 
  * @Last Modified by: ZXY
- * @Last Modified time: 2018-06-01 19:33:28
+ * @Last Modified time: 2018-06-02 22:34:37
  */
 
 var Models = require("../models/index");
@@ -55,9 +55,13 @@ BaseService.prototype.findAndCount=function(oParams={}){
 /**
  * 查询所有结果并计数
  * @param {查询条件} oParams 
+ * @param {分页编码} pageNo 
+ * @param {每页条数} pageSize 
  */
-BaseService.prototype.findAndCountAll=function(oParams={}){
+BaseService.prototype.findAndCountAll=function(oParams={},pageNo=1,pageSize){
     let tableName=this.tableName;
+    oParams.limit=oParams.limit||pageSize;
+    oParams.offset=typeof(oParams.offset)=="number"?oParams.offset:(oParams.limit*(pageNo-1));
     return Models[tableName].findAndCountAll(oParams);
 }
 /**
