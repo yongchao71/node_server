@@ -1,7 +1,7 @@
 var loger = require("../utils/loger").loger();
 var Models = require("../models/index");
 var BaseService=require("./BaseService");
-var CONSTANT=require("../config/constant");
+var CRESPONSE=require("../common/cresponse");
 function detail() {
     let User=new BaseService("User");
     let Belone=new BaseService("Belone");
@@ -9,10 +9,10 @@ function detail() {
     let options={attributes:["Name","Age"],where:{id:{$gt:21}},limit: 3};
     return  User.findAll(options).then(result=>{
        // loger.info("promise result-------------",JSON.stringify(result));
-       return CONSTANT.RESULT.SUCCESS(result);
+       return CRESPONSE.RESULT.SUCCESS(result);
     }).catch(e=>{
         loger.error("search error-----------",e);
-        return CONSTANT.ERROR.SERVERERROR;
+        return CRESPONSE.ERROR.SERVERERROR;
     });
 }
 function list(req, res, next) {
@@ -22,10 +22,10 @@ function list(req, res, next) {
     let options={where:{id:{$gte:21}}};
     return  User.findAndCountAll(options,pageNo,pageSize).then(result=>{
         // loger.info("promise result-------------",JSON.stringify(result));
-        return CONSTANT.RESULT.PAGINATION(result,pageNo,pageSize);
+        return CRESPONSE.RESULT.PAGINATION(result,pageNo,pageSize);
      }).catch(e=>{
          loger.error("search error-----------",e);
-         return CONSTANT.ERROR.SERVERERROR;
+         return CRESPONSE.ERROR.SERVERERROR;
      });
 }
 function add(req, res, next) {

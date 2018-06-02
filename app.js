@@ -2,7 +2,7 @@
  * @Author: ZXY 
  * @Date: 2018-04-15 12:02:01 
  * @Last Modified by: ZXY
- * @Last Modified time: 2018-06-01 16:08:24
+ * @Last Modified time: 2018-06-03 00:02:29
  */
 var express = require('express');
 var path = require('path');
@@ -91,6 +91,7 @@ app.use(function(req, res, next) {
 //拦截器
 app.use(function(err, req, res, next) {
   //console.log(err);
+  errorlogger.error("---------=-=-==================-=-=-=-=---------------",JSON.stringify(err));
   errorlogger.error(req.method,req.url,err.status);
   // set locals, only providing error in development
   res.locals.message = err.message;
@@ -101,6 +102,8 @@ app.use(function(err, req, res, next) {
   //res.render('error');
     if (err.name === 'UnauthorizedError') {   
         res.status(401).send('无效token');
+     }else{
+       res.send(err);
      }
 });
 
