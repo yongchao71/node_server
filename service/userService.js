@@ -14,7 +14,6 @@ function add(oUser) {
  */
 function bulkadd(aUsers){
     let User=new BaseService("User");
-    loger.info("aUsers--------",aUsers);
     return User.bulkCreate(aUsers);
 }
 /**
