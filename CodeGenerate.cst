@@ -1,0 +1,437 @@
+﻿<%-- 
+Name:zhangxy
+Author: zhangxueyong
+Description: 
+--%>
+<%@ CodeTemplate Language="C#" TargetLanguage="Text" Src="" Inherits="" Debug="False" Description="Template description here." ResponseEncoding="UTF-8"%>
+
+<%@ Property Name="NameSpace" Type="String"
+    Category="类"
+    Description="命名空间" %>
+ 
+<%@ Property Name="ClassName" Type="String"
+    Category="类"
+    Description="类名" %>
+ 
+<%@ Property Name="DevelopersName" Type="String"
+    Category="类"
+    Default="张雪勇"
+    Description="作者" %>
+
+<%@ Property Name="ClassDescription" Type="String"
+    Category="类"
+    Description="类说明" %>
+<%@ Property Name="SourceDatabase" Type="SchemaExplorer.DatabaseSchema" 
+	Category="数据库"  
+	Description="数据库源" %>
+<%@ Property Name="SourceTable" Type="SchemaExplorer.TableSchema" 
+	Category="数据库"  
+	Description="数据库源" %>
+
+
+<%@ Property Name="DBVersion" Type="DBVersions" 
+    Default="MYSQL" Optional="False" Category="数据库" 
+    Description="数据库类别" %>
+    
+<%@ Property Name="ORMType" Type="ORMTypes" 
+    Default="Model" Optional="False" Category="ORM类别" 
+    Description="ORM类别" %>
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Assembly Name="System.Data" %>
+<%@ Import Namespace="SchemaExplorer" %>
+<%@ Import Namespace="System.Data" %>
+<%@ Import Namespace="System.Text" %>
+<%@ Import Namespace="System.Text.RegularExpressions" %>
+
+/*
+ * @Author: <%= DevelopersName%> 
+ * @Date: <%= DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") %>
+ * @Last Modified by: <%= DevelopersName%>
+ * @Last Modified time:  <%= DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") %>
+ */
+<% if (ORMType==ORMTypes.Model){%>   
+   module.exports = (sequelize, DataTypes)=> {
+    let <%=FirstLetterToUp(SourceTable.Name,"t_") %>=sequelize.define("<%=FirstLetterToUp(SourceTable.Name,"t_") %>", {
+		<% foreach(ColumnSchema column in SourceTable.Columns) { %>
+               <%=FirstLetterToUp(column.Name) %>:{
+                     field:"<%=column.Name %>",
+                     type:<%= SequelizeType(column.DataType) %>,
+                     primaryKey:<%=ChangeJsBool(column.IsPrimaryKeyMember)%>,
+                     allowNull:<%=ChangeJsBool(column.AllowDBNull)%>,
+                     <%if(column.ExtendedProperties["CS_Default"].Value!=null&&(column.ExtendedProperties["CS_Default"].Value+"")!=""){%>
+                     defaultValue: <%=column.ExtendedProperties["CS_Default"].Value %>,
+                     <%}%>
+                     <%if(!String.IsNullOrWhiteSpace(column.Description)){%>
+                     comment:"<%=column.Description%>",
+                     <%}%>
+                     autoIncrement: <%=ChangeJsBool(column.ExtendedProperties["CS_IsIdentity"].Value)%>    
+                },    
+		<% } %>
+      },{
+        timestamps: false,
+        freezeTableName: true,
+        tableName: '<%=SourceTable.Name%>'
+      })
+     return <%=FirstLetterToUp(SourceTable.Name,"t_") %>;
+  }
+
+<%} else if(ORMType==ORMTypes.Service){%>
+
+        var loger = require("../utils/loger").loger();
+        var Models = require("../models/index");
+        var BaseService=require("./BaseService");
+        var CRESPONSE=require("../common/cresponse");
+        /**
+         * 添加用户
+         */
+        function add(o<%=FirstLetterToUp(SourceTable.Name,"t_") %>) {
+            let <%=FirstLetterToUp(SourceTable.Name,"t_") %>=new BaseService("<%=FirstLetterToUp(SourceTable.Name,"t_") %>");
+            return <%=FirstLetterToUp(SourceTable.Name,"t_") %>.create(o<%=FirstLetterToUp(SourceTable.Name,"t_") %>);
+        }
+        /**
+         * 批量添加<%=FirstLetterToUp(SourceTable.Name,"t_") %>
+         */
+        function bulkadd(a<%=FirstLetterToUp(SourceTable.Name,"t_") %>s){
+            let <%=FirstLetterToUp(SourceTable.Name,"t_") %>=new BaseService("<%=FirstLetterToUp(SourceTable.Name,"t_") %>");
+            return <%=FirstLetterToUp(SourceTable.Name,"t_") %>.bulkCreate(a<%=FirstLetterToUp(SourceTable.Name,"t_") %>s);
+        }
+        /**
+         * 根据id删除用户信息
+         * @param {删除id} sid 
+         */
+        function removebyid(sid) {
+            let <%=FirstLetterToUp(SourceTable.Name,"t_") %>=new BaseService("<%=FirstLetterToUp(SourceTable.Name,"t_") %>");
+            return  <%=FirstLetterToUp(SourceTable.Name,"t_") %>.destroy({where:{Id:sid}});
+        }
+        /**
+         * 根据id更新单个对象
+         * @param {更新对象} o<%=FirstLetterToUp(SourceTable.Name,"t_") %>
+         */
+        function updatebyid(o<%=FirstLetterToUp(SourceTable.Name,"t_") %>) {
+            let <%=FirstLetterToUp(SourceTable.Name,"t_") %>=new BaseService("<%=FirstLetterToUp(SourceTable.Name,"t_") %>");
+            return <%=FirstLetterToUp(SourceTable.Name,"t_") %>.update(o<%=FirstLetterToUp(SourceTable.Name,"t_") %>, {where: {Id: o<%=FirstLetterToUp(SourceTable.Name,"t_") %>.Id}});
+        }
+        /**
+         * 根据id查询单个条目
+         * @param {查询id} sid 
+         */
+        function findbyid(sid) {
+            let <%=FirstLetterToUp(SourceTable.Name,"t_") %>=new BaseService("<%=FirstLetterToUp(SourceTable.Name,"t_") %>");
+            return  <%=FirstLetterToUp(SourceTable.Name,"t_") %>.findByPrimary(sid);
+        }
+        /**
+         * 根据条件查询分页列表
+         * @param {查询调教} options 
+         * @param {分页编码} pageNo 
+         * @param {每页条目} pageSize 
+         */
+        function list(options, pageNo, pageSize) {
+            let <%=FirstLetterToUp(SourceTable.Name,"t_") %>=new BaseService("<%=FirstLetterToUp(SourceTable.Name,"t_") %>");
+            return  <%=FirstLetterToUp(SourceTable.Name,"t_") %>.findAndCountAll(options,pageNo,pageSize);
+        }
+        /**
+         * 根据条件查询所有列表
+         * @param {查询条件} options 
+         */
+        function listall(options) {
+            let <%=FirstLetterToUp(SourceTable.Name,"t_") %>=new BaseService("<%=FirstLetterToUp(SourceTable.Name,"t_") %>");
+            return  <%=FirstLetterToUp(SourceTable.Name,"t_") %>.findAll(options);
+        }
+        module.exports = {
+            add: add,
+            bulkadd:bulkadd,
+            removebyid: removebyid,
+            updatebyid: updatebyid,
+            findbyid: findbyid,
+            list: list,
+            listall:listall
+        }
+<%} else if(ORMType==ORMTypes.Controller){%>
+
+var CONFIGAPI = require("./../config/remoteAPI");
+var httpRequest = require("./../utils/httpRequest");
+
+var CRESPONSE = require("../common/cresponse");
+var router = require('express').Router();
+var userService = require("./../service/userService");
+var loger = require("../utils/loger").loger();
+
+/**
+ * 添加单挑信息
+ */
+router.post('/add', (req, res, next) => {
+    let oUser = req.body;
+    oUser = {
+        AAA: "sfdgsfdg",
+        Name: "撒大声地sdf山东饭馆",
+        LoginName: "itemLoginName",
+        Address: "Beijing111北京" + Math.random(),
+        Email: "EEE@123.com",
+        CreateTime: new Date(),
+        Age: 11
+    }
+    userService.add(oUser).then(result => {
+        let createResult = CRESPONSE.RESULT.SUCCESS(result);
+        res.send(createResult);
+    }).catch(error => {
+        loger.error("create error-----------", error);
+        let errorResult = CRESPONSE.ERROR.SERVERERROR;
+        res.send(errorResult);
+    });
+});
+/**
+ * 批量添加
+ */
+router.post('/bulkadd', (req, res, next) => {
+    let oUser = {
+        Name: "sdf山东饭馆",
+        LoginName: "itemLoginName",
+        Address: "Beijing111北京" + Math.random(),
+        Email: "EEE@123.com",
+        CreateTime: new Date(),
+        Age: 11
+    }
+    let aUsers = [oUser, oUser];
+    userService.bulkadd(aUsers).then(result => {
+        let createResult = CRESPONSE.RESULT.SUCCESS(result);
+        res.send(createResult);
+    }).catch(error => {
+        loger.error("create error-----------", error);
+        let errorResult = CRESPONSE.ERROR.SERVERERROR;
+        res.send(errorResult);
+    });
+});
+/**
+ * 根据id删除
+ */
+router.delete('/:sid', (req, res, next) => {
+    let sid = req.params.sid;
+    userService.removebyid(sid).then(result => {
+        let deleteResult = CRESPONSE.RESULT.SUCCESS(result);
+        res.send(deleteResult);
+    }).catch(error => {
+        loger.error("delete error-----------", error);
+        let errorResult = CRESPONSE.ERROR.SERVERERROR;
+        res.send(errorResult);
+    });
+});
+/**
+ * 根据主键修改
+ */
+router.put('/:sid', (req, res, next) => {
+    let sid = req.params.sid;
+    let oUser = {
+        Name: "sdf山东饭馆",
+        LoginName: "itemLoginName",
+        Address: "Beijing111北京" + Math.random(),
+        Email: "EEE@123.com",
+        CreateTime: new Date(),
+        Age: 123,
+        Id: sid
+    }
+    userService.updatebyid(oUser).then(result => {
+        let updateResult = CRESPONSE.RESULT.SUCCESS(result);
+        res.send(updateResult);
+    }).catch(error => {
+        loger.error("update error-----------", error);
+        let errorResult = CRESPONSE.ERROR.SERVERERROR;
+        res.send(errorResult);
+    });
+});
+/**
+ * 获取分页列表
+ */
+router.get('/list', (req, res, next) => {
+    CRESPONSE.VALPARAM.NOTNULL(0, "请求参数不能为空");
+    let pageNo = 1;
+    let pageSize = 3;
+    let options = { where: { id: { $gte: 21 } } };
+    userService.list(options, pageNo, pageSize).then(result => {
+        let searchResult = CRESPONSE.RESULT.PAGINATION(result, pageNo, pageSize);
+        res.send(searchResult);
+    }).catch(error => {
+        loger.error("search list error-----------", error);
+        let errorResult = CRESPONSE.ERROR.SERVERERROR;
+        res.send(errorResult);
+    });
+});
+/**
+ * 获取所有查询结果
+ */
+router.get('/listall', (req, res, next) => {
+    CRESPONSE.VALPARAM.NOTNULL(0, "请求参数不能为空");
+    let options = { where: { id: { $gte: 21 } } };
+    userService.listall(options).then(result => {
+        let searchResult = CRESPONSE.RESULT.SUCCESS(result);
+        res.send(searchResult);
+    }).catch(error => {
+        loger.error("search list error-----------", error);
+        let errorResult = CRESPONSE.ERROR.SERVERERROR;
+        res.send(errorResult);
+    });
+});
+/**
+ * 根绝主键查询单挑信息
+ */
+router.get('/:sid', (req, res, next) => {
+    let sid = req.params.sid;
+    userService.findbyid(sid).then(result => {
+        let searchResult = CRESPONSE.RESULT.SUCCESS(result);
+        res.send(searchResult);
+    }).catch(error => {
+        loger.error("search error-----------", error);
+        let errorResult = CRESPONSE.ERROR.SERVERERROR;
+        res.send(errorResult);
+    });
+});
+
+router.get('/get', function (req, res, next) {
+    res.render('index', { title: 'Express' });
+});
+
+module.exports = router;
+
+<%}%>
+
+
+<script runat="template">
+public int iCount =0;
+public string CSharpType(System.Data.DbType columnDataType)
+{
+	//if (column.Name.EndsWith("TypeCode")) return column.Name;
+	switch (columnDataType)
+	{
+		case DbType.AnsiString: return "string";
+		case DbType.AnsiStringFixedLength: return "string";
+		case DbType.Binary: return "byte[]";
+		case DbType.Boolean: return "bool";
+		case DbType.Byte: return "byte";
+		case DbType.Currency: return "decimal";
+		case DbType.Date: return "DateTime";
+		case DbType.DateTime: return "DateTime";
+		case DbType.Decimal: return "decimal";
+		case DbType.Double: return "double";
+		case DbType.Guid: return "Guid";
+		case DbType.Int16: return "short";
+		case DbType.Int32: return "int";
+		case DbType.Int64: return "long";
+		case DbType.Object: return "string";
+		case DbType.SByte: return "byte";
+		case DbType.Single: return "float";
+		case DbType.String: return "string";
+		case DbType.StringFixedLength: return "string";
+		case DbType.Time: return "TimeSpan";
+		case DbType.UInt16: return "short";
+		case DbType.UInt32: return "int";
+		case DbType.UInt64: return "long";
+		case DbType.VarNumeric: return "int";
+		default:
+		{
+			return "__UNKNOWN__" + columnDataType;
+		}
+	}
+}
+
+
+
+  
+
+
+
+
+
+
+
+
+public string SequelizeType(System.Data.DbType columnDataType)
+{
+	//if (column.Name.EndsWith("TypeCode")) return column.Name;
+	switch (columnDataType)
+	{
+		case DbType.AnsiString: return "DataTypes.INTEGER";
+		case DbType.AnsiStringFixedLength: return "DataTypes.INTEGER";
+		case DbType.Binary: return  "\"BLOB\"";
+		case DbType.Boolean: return "Sequelize.BOOLEAN";
+		case DbType.Byte: return "\"BLOB\"";
+		case DbType.Currency: return "DataTypes.DECIMAL";
+		case DbType.Date: return "DataTypes.DATEONLY";
+		case DbType.DateTime: return "DataTypes.DATE";
+		case DbType.Decimal: return "Sequelize.DECIMAL";
+		case DbType.Double: return "Sequelize.DOUBLE";
+		case DbType.Guid: return "Sequelize.UUID";
+		case DbType.Int16: return "DataTypes.INTEGER(6)";
+		case DbType.Int32: return "DataTypes.INTEGER(11)";
+		case DbType.Int64: return "DataTypes.BIGINT";
+		case DbType.Object: return "\"MULTIPOLYGON\"";
+		case DbType.SByte: return "DataTypes.INTEGER(4)";
+		case DbType.Single: return "DataTypes.FLOAT";
+		case DbType.String: return "DataTypes.TEXT";
+		case DbType.StringFixedLength: return "DataTypes.TEXT";
+		case DbType.Time: return "DataTypes.TIME";
+		case DbType.UInt16: return "DataTypes.BOOLEAN";
+		case DbType.UInt32: return "DataTypes.INTEGER(11)";
+		case DbType.UInt64: return "DataTypes.BIGINT";
+		case DbType.VarNumeric: return "DataTypes.INTEGER(11)";
+		default:
+		{
+			return "Sequelize.STRING";
+		}
+	}
+}
+
+
+public string GetMVCFieldType(System.Data.DbType columnDataType)
+{
+    switch (columnDataType)
+	{
+		case DbType.Currency: return "Currency";
+		case DbType.Decimal: return "Currency";
+		case DbType.Double: return "Currency";
+		case DbType.Date: return "DateTime";
+		case DbType.DateTime: return "DateTime";
+		case DbType.Time: return "DateTime";
+		default:
+		{
+			return "Text";
+		}
+    }
+}
+
+    public string ChangeJsBool(object booldata){
+        bool bdata=(bool)booldata;
+        if(bdata){
+            return "true";
+        }else{
+            return "false";
+        }
+    }
+
+        public string FirstLetterToUp(String sourceStr,string isFilterPrefix="") {
+            sourceStr= Regex.Replace(sourceStr, isFilterPrefix, "");
+            var aLetter = sourceStr.Split('_');
+            StringBuilder sb = new StringBuilder();
+            foreach (var item in aLetter)
+            {
+                String itemResult = item.Substring(0, 1).ToUpper();
+                if (item.Length > 1) {
+                    itemResult += item.Substring(1);
+                }
+                sb.Append(itemResult);
+            }
+            return sb.ToString();
+        }
+
+
+public enum DBVersions
+{
+    MYSQL,
+    MSSQL
+    
+}
+public enum ORMTypes
+{
+    Model,
+    Service,
+    Controller
+}
+</script>
