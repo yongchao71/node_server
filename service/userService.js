@@ -2,80 +2,74 @@ var loger = require("../utils/loger").loger();
 var Models = require("../models/index");
 var BaseService=require("./BaseService");
 var CRESPONSE=require("../common/cresponse");
-function detail() {
+/**
+ * 添加User
+ */
+function add(oUser) {
     let User=new BaseService("User");
-    let Belone=new BaseService("Belone");
-    let Doctors=new BaseService("Doctors");
-    let options={attributes:["Name","Age"],where:{id:{$gt:21}},limit: 3};
-    return  User.findAll(options).then(result=>{
-       // loger.info("promise result-------------",JSON.stringify(result));
-       return CRESPONSE.RESULT.SUCCESS(result);
-    }).catch(e=>{
-        loger.error("search error-----------",e);
-        return CRESPONSE.ERROR.SERVERERROR;
-    });
+    return User.create(oUser);
 }
-function list(req, res, next) {
+/**
+ * 批量添加User
+ */
+function bulkadd(aUsers){
     let User=new BaseService("User");
-    let pageNo=1;
-    let pageSize=3;
-    let options={where:{id:{$gte:21}}};
-    return  User.findAndCountAll(options,pageNo,pageSize).then(result=>{
-        // loger.info("promise result-------------",JSON.stringify(result));
-        return CRESPONSE.RESULT.PAGINATION(result,pageNo,pageSize);
-     }).catch(e=>{
-         loger.error("search error-----------",e);
-         return CRESPONSE.ERROR.SERVERERROR;
-     });
+    loger.info("aUsers--------",aUsers);
+    return User.bulkCreate(aUsers);
 }
-function add(req, res, next) {
-    let user = {
-        Name: "sdf山东饭馆",
-        LoginName:"itemLoginName",
-        Address: "Beijing111北京"+Math.random(),
-        Email: "EEE@123.com",
-        CreateTime: new Date(),
-        Age: 11
-    }
+/**
+ * 根据id删除
+ * @param {删除id} uid 
+ */
+function removebyid(uid) {
+    let User=new BaseService("User");
+    return  User.destroy({where:{Id:uid}});
+}
+/**
+ * 根据id更新单个对象
+ * @param {更新对象} oUser 
+ */
+function updatebyid(oUser) {
+    let User=new BaseService("User");
+    return User.update(oUser, {where: {Id: oUser.Id}});
+}
+/**
+ * 根据id查询单个条目
+ * @param {查询id} uid 
+ */
+function findbyid(uid) {
+    let User=new BaseService("User");
+    return  User.findByPrimary(uid);
+}
+/**
+ * 根据条件查询分页列表
+ * @param {查询调教} options 
+ * @param {分页编码} pageNo 
+ * @param {每页条目} pageSize 
+ */
+function list(options, pageNo, pageSize) {
+    let User=new BaseService("User");
+    return  User.findAndCountAll(options,pageNo,pageSize);
+}
+/**
+ * 根据条件查询所有列表
+ * @param {查询条件} options 
+ */
+function listall(options) {
+    let User=new BaseService("User");
+    return  User.findAll(options);
+}
 
-    Models.User.create(user).then(result => {
-        loger.info("create users------------------", JSON.stringify(result));
-        res.send({ "user": result });
-    }).catch(e => {
-        loger.error("create user error---------", e);
-        res.send({ "error": e });
-    });
-}
-function update(req, res, next) {
-    Models.User.update({
-        LoginName: "登录名24352345"
-    }, {
-            where: {
-                Id: 21
-            }
-        }).then(result => {
-            loger.info(result);
-            res.send({ "user": JSON.stringify(result)});
-        }).catch(e => {
 
-            loger.error("e----------------->", e);
-            res.send({ "error": e });
-        });
-}
 
-function remove(req, res, next) {
-    Models.User.destroy({          where: {
-        Id: 27
-    }}).then(result => {
-        loger.info("Users-------------->", JSON.stringify(result));
-    });
-    res.send({ "user": "user result" });
-}
+
 
 module.exports = {
-    detail: detail,
     add: add,
-    update: update,
+    bulkadd:bulkadd,
+    removebyid: removebyid,
+    updatebyid: updatebyid,
+    findbyid: findbyid,
     list: list,
-    remove: remove
+    listall:listall
 }
