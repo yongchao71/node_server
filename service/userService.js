@@ -1,9 +1,16 @@
+/*
+ * @Author: ZXY 
+ * @Date: 2018-03-20 13:41:18 
+ * @Last Modified by: ZXY
+ * @Last Modified time: 2018-06-03 19:54:27
+ */
+
 var loger = require("../utils/loger").loger();
 var Models = require("../models/index");
 var BaseService=require("./BaseService");
 var CRESPONSE=require("../common/cresponse");
 /**
- * 添加User
+ * 添加用户
  */
 function add(oUser) {
     let User=new BaseService("User");
@@ -17,7 +24,7 @@ function bulkadd(aUsers){
     return User.bulkCreate(aUsers);
 }
 /**
- * 根据id删除
+ * 根据id删除用户信息
  * @param {删除id} uid 
  */
 function removebyid(uid) {

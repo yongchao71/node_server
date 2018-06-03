@@ -13,7 +13,7 @@ var auto = new SequelizeAuto(
             timestamps: false
             //...
         },
-        tables: ['o_users']
+        tables: ['t_test']
     }
 )
 // auto.run(function (err) {
