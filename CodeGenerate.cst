@@ -5,29 +5,32 @@ Description:
 --%>
 <%@ CodeTemplate Language="C#" TargetLanguage="Text" Src="" Inherits="" Debug="False" Description="Template description here." ResponseEncoding="UTF-8"%>
 
-<%@ Property Name="NameSpace" Type="String"
-    Category="类"
-    Description="命名空间" %>
+<%@ Property Name="IsDefineTableName" Type="TrueOrFalse"
+    Category="生成选项" Optional="True"  Default="False"
+    Description="是否默认表明" %>
+<%@ Property Name="IsUpFirstLetter" Type="TrueOrFalse"
+    Category="生成选项" Optional="False"  Default="True"
+    Description="是否表首字母大写" %>
  
-<%@ Property Name="ClassName" Type="String"
-    Category="类"
-    Description="类名" %>
+<%@ Property Name="CustomName" Type="String"
+    Category="生成选项"  Optional="True"
+    Description="自定义实体名" %>
  
 <%@ Property Name="DevelopersName" Type="String"
-    Category="类"
-    Default="张雪勇"
+    Category="生成选项"
+    Default="ZXY"
     Description="作者" %>
 
-<%@ Property Name="ClassDescription" Type="String"
-    Category="类"
-    Description="类说明" %>
+
 <%@ Property Name="SourceDatabase" Type="SchemaExplorer.DatabaseSchema" 
-	Category="数据库"  
+	Category="数据库"   Optional="True"
 	Description="数据库源" %>
 <%@ Property Name="SourceTable" Type="SchemaExplorer.TableSchema" 
 	Category="数据库"  
-	Description="数据库源" %>
-
+	Description="数据表源" %>
+<%@ Property Name="TableDescription" Type="String" 
+	Category="数据库" 
+	Description="表说明" %>
 
 <%@ Property Name="DBVersion" Type="DBVersions" 
     Default="MYSQL" Optional="False" Category="数据库" 
@@ -44,7 +47,7 @@ Description:
 <%@ Import Namespace="System.Text.RegularExpressions" %>
 
 /*
- * @Author: <%= DevelopersName%> 
+ * @Author: <%= DevelopersName%>
  * @Date: <%= DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") %>
  * @Last Modified by: <%= DevelopersName%>
  * @Last Modified time:  <%= DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") %>
@@ -70,7 +73,8 @@ Description:
       },{
         timestamps: false,
         freezeTableName: true,
-        tableName: '<%=SourceTable.Name%>'
+        tableName: '<%=SourceTable.Name%>'，
+        comment:"<%=TableDescription%>",
       })
      return <%=FirstLetterToUp(SourceTable.Name,"t_") %>;
   }
@@ -82,21 +86,21 @@ Description:
         var BaseService=require("./BaseService");
         var CRESPONSE=require("../common/cresponse");
         /**
-         * 添加用户
+         * 添加<%=TableDescription %>
          */
         function add(o<%=FirstLetterToUp(SourceTable.Name,"t_") %>) {
             let <%=FirstLetterToUp(SourceTable.Name,"t_") %>=new BaseService("<%=FirstLetterToUp(SourceTable.Name,"t_") %>");
             return <%=FirstLetterToUp(SourceTable.Name,"t_") %>.create(o<%=FirstLetterToUp(SourceTable.Name,"t_") %>);
         }
         /**
-         * 批量添加<%=FirstLetterToUp(SourceTable.Name,"t_") %>
+         * 批量添加<%=TableDescription %>
          */
         function bulkadd(a<%=FirstLetterToUp(SourceTable.Name,"t_") %>s){
             let <%=FirstLetterToUp(SourceTable.Name,"t_") %>=new BaseService("<%=FirstLetterToUp(SourceTable.Name,"t_") %>");
             return <%=FirstLetterToUp(SourceTable.Name,"t_") %>.bulkCreate(a<%=FirstLetterToUp(SourceTable.Name,"t_") %>s);
         }
         /**
-         * 根据id删除用户信息
+         * 根据id删除<%=TableDescription %>
          * @param {删除id} sid 
          */
         function removebyid(sid) {
@@ -104,7 +108,7 @@ Description:
             return  <%=FirstLetterToUp(SourceTable.Name,"t_") %>.destroy({where:{Id:sid}});
         }
         /**
-         * 根据id更新单个对象
+         * 根据id更新<%=TableDescription %>
          * @param {更新对象} o<%=FirstLetterToUp(SourceTable.Name,"t_") %>
          */
         function updatebyid(o<%=FirstLetterToUp(SourceTable.Name,"t_") %>) {
@@ -112,7 +116,7 @@ Description:
             return <%=FirstLetterToUp(SourceTable.Name,"t_") %>.update(o<%=FirstLetterToUp(SourceTable.Name,"t_") %>, {where: {Id: o<%=FirstLetterToUp(SourceTable.Name,"t_") %>.Id}});
         }
         /**
-         * 根据id查询单个条目
+         * 根据id查询<%=TableDescription %>
          * @param {查询id} sid 
          */
         function findbyid(sid) {
@@ -120,7 +124,7 @@ Description:
             return  <%=FirstLetterToUp(SourceTable.Name,"t_") %>.findByPrimary(sid);
         }
         /**
-         * 根据条件查询分页列表
+         * 根据条件查询分页<%=TableDescription %>列表
          * @param {查询调教} options 
          * @param {分页编码} pageNo 
          * @param {每页条目} pageSize 
@@ -130,7 +134,7 @@ Description:
             return  <%=FirstLetterToUp(SourceTable.Name,"t_") %>.findAndCountAll(options,pageNo,pageSize);
         }
         /**
-         * 根据条件查询所有列表
+         * 根据条件查询所有<%=TableDescription %>列表
          * @param {查询条件} options 
          */
         function listall(options) {
@@ -157,7 +161,7 @@ var userService = require("./../service/userService");
 var loger = require("../utils/loger").loger();
 
 /**
- * 添加单挑信息
+ * 添加<%=TableDescription %>
  */
 router.post('/add', (req, res, next) => {
     let oUser = req.body;
@@ -180,7 +184,7 @@ router.post('/add', (req, res, next) => {
     });
 });
 /**
- * 批量添加
+ * 批量添加<%=TableDescription %>
  */
 router.post('/bulkadd', (req, res, next) => {
     let oUser = {
@@ -202,7 +206,7 @@ router.post('/bulkadd', (req, res, next) => {
     });
 });
 /**
- * 根据id删除
+ * 根据id删除<%=TableDescription %>
  */
 router.delete('/:sid', (req, res, next) => {
     let sid = req.params.sid;
@@ -216,7 +220,7 @@ router.delete('/:sid', (req, res, next) => {
     });
 });
 /**
- * 根据主键修改
+ * 根据主键修改<%=TableDescription %>
  */
 router.put('/:sid', (req, res, next) => {
     let sid = req.params.sid;
@@ -239,7 +243,7 @@ router.put('/:sid', (req, res, next) => {
     });
 });
 /**
- * 获取分页列表
+ * 获取分页<%=TableDescription %>列表
  */
 router.get('/list', (req, res, next) => {
     CRESPONSE.VALPARAM.NOTNULL(0, "请求参数不能为空");
@@ -256,7 +260,7 @@ router.get('/list', (req, res, next) => {
     });
 });
 /**
- * 获取所有查询结果
+ * 获取所有<%=TableDescription %>结果
  */
 router.get('/listall', (req, res, next) => {
     CRESPONSE.VALPARAM.NOTNULL(0, "请求参数不能为空");
@@ -271,7 +275,7 @@ router.get('/listall', (req, res, next) => {
     });
 });
 /**
- * 根绝主键查询单挑信息
+ * 根据主键查询<%=TableDescription %>
  */
 router.get('/:sid', (req, res, next) => {
     let sid = req.params.sid;
@@ -380,23 +384,6 @@ public string SequelizeType(System.Data.DbType columnDataType)
 }
 
 
-public string GetMVCFieldType(System.Data.DbType columnDataType)
-{
-    switch (columnDataType)
-	{
-		case DbType.Currency: return "Currency";
-		case DbType.Decimal: return "Currency";
-		case DbType.Double: return "Currency";
-		case DbType.Date: return "DateTime";
-		case DbType.DateTime: return "DateTime";
-		case DbType.Time: return "DateTime";
-		default:
-		{
-			return "Text";
-		}
-    }
-}
-
     public string ChangeJsBool(object booldata){
         bool bdata=(bool)booldata;
         if(bdata){
@@ -421,17 +408,26 @@ public string GetMVCFieldType(System.Data.DbType columnDataType)
             return sb.ToString();
         }
 
-
+/**
+ *数据库类型
+ */
 public enum DBVersions
 {
     MYSQL,
     MSSQL
     
 }
+/**
+ *  要生成的模型 Model 实体  
+ */
 public enum ORMTypes
 {
     Model,
     Service,
     Controller
+}
+public enum TrueOrFalse{
+    True,
+    False
 }
 </script>
