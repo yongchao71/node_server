@@ -12,7 +12,6 @@ var path=require('path');
 var loger= require('./../utils/loger').loger();
  ///////////////////////////////////////////////////////////////
 //{"bootenv":"dev","serverport":8041,"defaultenv":"dev"}
-
 let iRunPort=process.argv[2]||"9000"; //获取运行端口
 let sRunEnv=process.argv[3]||"dev"; //获取启动环境
 
@@ -40,7 +39,6 @@ fs.writeFile(constantPath, sBootConfig, function(err){
     loger.info("config success -",sBootConfig);
     server.on('error', onError);
     server.on('listening', onListening);
-
     /**
      * Event listener for HTTP server "listening" event.
      */
@@ -68,6 +66,7 @@ process.on('uncaughtException', function(e) {
  */
 
 function onError(error) {
+  loger.error("error------------",error);
   if (error.syscall !== 'listen') {
     throw error;
   }

@@ -2,24 +2,20 @@
  * @Author: ZXY 
  * @Date: 2018-03-28 22:25:42 
  * @Last Modified by: ZXY
- * @Last Modified time: 2018-05-26 18:00:26
+ * @Last Modified time: 2018-06-03 18:57:41
  */
+var path = require("path");
+var fs = require('fs');
+const dcontrollers = path.resolve(__dirname, '../controllers');
 function registorRoutes(app) {
-    var requires = [
-        {
-            root:"/",
-            require: '../routes/index'
-        },{
-            root:"/users",
-            require: '../routes/users'
-        },{
-            root:"/seque",
-            require: '../routes/seque'
+    fs.existsSync(dcontrollers) && fs.readdirSync(dcontrollers).map(item => {
+        let oItem = path.parse(item);
+        if (oItem.ext == ".js") {
+            let rootName = oItem.name.replace(/controller/i, "").toLocaleLowerCase();
+            let root = `/${rootName}`;
+            let jsPath = path.join(dcontrollers, item);
+            app.use(root, require(jsPath));
         }
-    ];
-
-    requires.forEach(function(item, index) {
-        app.use(item.root, require(item.require));
     });
 }
 module.exports = registorRoutes;

@@ -16,7 +16,7 @@ fs.existsSync(daopath) && fs.readdirSync(daopath).map(item => {
         oModels[sName]=sequelize.import(jsPath);
     }
 });
-loger.info("sequelize.models----------",sequelize.models);
+//loger.info("sequelize.models----------",sequelize.models);
 sequelize.models.Belone.belongsTo(sequelize.models.User, { foreignKey: 'UserId',targetKey:'Id'})
 
 sequelize.models.User.hasMany(sequelize.models.Belone, {foreignKey:'UserId', targetKey:'Id'});

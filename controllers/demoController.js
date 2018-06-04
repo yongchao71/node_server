@@ -1,33 +1,33 @@
 /*
  * @Author: ZXY 
- * @Date: 2018-03-20 13:41:18 
+ * @Date: 2018-06-01 15:43:54 
  * @Last Modified by: ZXY
- * @Last Modified time: 2018-05-25 20:19:00
+ * @Last Modified time: 2018-06-01 22:26:49
  */
+
 var CONFIGAPI = require("./../config/remoteAPI");
 var httpRequest = require("./../utils/httpRequest");
 var loger = require("../utils/loger").loger();
 var sequelize = require("../dao/sequelize/sqBase").sequelize;
-var Models=require("../models/index");
-var Users = require("../dao/sequelize/sqBase").Users;
+var Models = require("../models/index");
 
-function sequelizetest(req, res, next) {
+var express = require('express');
+var router = express.Router();
+router.get('/sequelizetest', (req, res, next) => {
 
-    console.log("Models------------------",Models,Models.Users);
 
-    
-let user={
-    Name:"sdf山东饭馆",
-    Address:"Beijing111北京",
-    Email:"EEE@123.com",
-    Age:11
-}
+    let user = {
+        Name: "sdf山东饭馆",
+        Address: "Beijing111北京",
+        Email: "EEE@123.com",
+        Age: 11
+    }
 
-Models.Users.create(user).then(result=>{
-    loger.info("create users------------------",JSON.stringify(result));
-}).catch(e=>{
-    loger.error("create user error---------",e);
-});
+    Models.Users.create(user).then(result => {
+        loger.info("create users------------------", JSON.stringify(result));
+    }).catch(e => {
+        loger.error("create user error---------", e);
+    });
 
     // Users.findAll({attributes:["Name","Age"]}) .then(result=>{
     //     loger.info("----find result-----",JSON.stringify(result));
@@ -39,17 +39,16 @@ Models.Users.create(user).then(result=>{
     // });
 
 
-    Models.Users.findAll({attributes:["Name","Age","email"]}).then(result=>{
-        loger.info("----find result-----",JSON.stringify(result));
-        res.send({result:result});
-    }).catch(e=>{
-        loger.error("e----------------->",e);
-        res.send({result:e});
+    Models.Users.findAll({ attributes: ["Name", "Age", "email"] }).then(result => {
+        loger.info("----find result-----", JSON.stringify(result));
+        res.send({ result: result });
+    }).catch(e => {
+        loger.error("e----------------->", e);
+        res.send({ result: e });
     });
-    
-}
 
-function detail(req, res, next) {
+});
+router.get('/detail', (req, res, next) => {
     let aaa = 23;
     loger.info("detail-----", req.session);
     let user = req.session.user || "no user";
@@ -57,9 +56,8 @@ function detail(req, res, next) {
     res.send({
         "user": user
     });
-}
-
-function add(req, res, next) {
+});
+router.post('/add', (req, res, next) => {
     let aaa = 23;
     loger.info("add-----", req.session);
     loger.info(req.body);
@@ -67,9 +65,10 @@ function add(req, res, next) {
     res.send({
         "hhhhhh": "hjgjhgdfgh枯干古jhg"
     });
-}
+});
 
-function test(req, res, next) {
+
+router.get('/test', (req, res, next) => {
 
     let getUrl = `${CONFIGAPI.product.list}?unionid=oDOgS0kCV5its31fROZtbdqcpMAE&test=測試`;
 
@@ -99,10 +98,13 @@ function test(req, res, next) {
         res.send(result[1]);
     });
     //res.send("this is test data..");
-}
-module.exports = {
-    sequelizetest: sequelizetest,
-    detail: detail,
-    add: add,
-    test: test
-}
+});
+router.get('/get', function (req, res, next) {
+    res.render('index', { title: 'Express' });
+});
+
+
+
+
+
+module.exports = router;

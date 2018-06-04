@@ -2,20 +2,23 @@
  * @Author: ZXY 
  * @Date: 2018-03-20 13:41:18 
  * @Last Modified by: ZXY
- * @Last Modified time: 2018-05-29 16:12:23
+ * @Last Modified time: 2018-06-01 22:22:05
  */
 var CONFIGAPI = require("./../config/remoteAPI");
 var httpRequest = require("./../utils/httpRequest");
 var loger = require("../utils/loger").loger();
 var Models = require("../models/index");
 
-function detail(req, res, next) {
+var express = require('express');
+var router = express.Router();
+
+router.get('/detail', (req, res, next)=>{
     Models.User.findOne().then(result => {
         loger.info("Users-------------->", JSON.stringify(result));
     });
     res.send({ "user": "user result" });
-}
-function add(req, res, next) {
+});
+router.get('/add', (req, res, next)=>{
     let user = {
         Name: "sdf山东饭馆",
         Address: "Beijing111北京"+Math.random(),
@@ -31,8 +34,8 @@ function add(req, res, next) {
         loger.error("create user error---------", e);
         res.send({ "error": e });
     });
-}
-function update(req, res, next) {
+});
+router.get('/update', (req, res, next)=>{
     Models.User.update({
         LoginName: "登录名24352345"
     }, {
@@ -47,8 +50,8 @@ function update(req, res, next) {
             loger.error("e----------------->", e);
             res.send({ "error": e });
         });
-}
-function list(req, res, next) {
+});
+router.get('/list', (req, res, next)=>{
     // Models.Users.findAll({ attributes: ["Name", "Age", "email"] }).then(result => {
     //     loger.info("----find result-----", JSON.stringify(result));
     //     res.send({ result: result });
@@ -64,7 +67,7 @@ function list(req, res, next) {
     // });
     let Op = Models.Sequelize.Op;
     Models.Group.findAll({include:{model:Models.Group,include:{model:Models.Group}} ,where:{ParentId:{$eq: null}}}).then(result=>{
-        loger.info("Group result----------",JSON.stringify(result));
+        loger.info("Group result---111-------",JSON.stringify(result));
     }).catch(e=>{
         loger.error("Group---e-----------------",e);
     });
@@ -77,7 +80,6 @@ function list(req, res, next) {
     }).catch(e=>{
         loger.error("e-----------------",e);
     });
-
     Models.Belone.findAll({include:Models.User}).then(result=>{
        // loger.info("belone result----------",JSON.stringify(result));
         res.send({ result: result });
@@ -85,9 +87,6 @@ function list(req, res, next) {
         loger.error("e-----------------",e);
         res.send({ result: e });
     });
-
-
-
     // Models.Users.findAndCountAll({
     //     where:{Name:"sdf山东饭馆"},
     //     order: [['CreateTime', 'ASC']],
@@ -102,20 +101,13 @@ function list(req, res, next) {
     //     loger.error("e----------------->", e);
     //     res.send({ result: e });
     // });
-}
-function remove(req, res, next) {
+});
+router.get('/remove',(req, res, next)=>{
     Models.User.destroy({          where: {
         Id: 27
     }}).then(result => {
         loger.info("Users-------------->", JSON.stringify(result));
     });
     res.send({ "user": "user result" });
-}
-
-module.exports = {
-    detail: detail,
-    add: add,
-    update: update,
-    list: list,
-    remove: remove
-}
+});
+module.exports = router;

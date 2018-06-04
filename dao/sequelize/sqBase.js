@@ -14,9 +14,9 @@ const sequelize = new Sequelize('lecanyu', 'root', 'zxy1111', {
 }
 });
 sequelize.authenticate().then(() => {
-    console.log('Connection has been established successfully.');
+    loger.info('Connection has been established successfully.');
   }).catch(err => {
-    console.error('Unable to connect to the database:', err);
+    loger.error('Unable to connect to the database:', err);
   });
 
 // const Users = sequelize.define("users", {
@@ -28,6 +28,7 @@ sequelize.authenticate().then(() => {
 // },{
 //   timestamps: false
 // });
+
 
 
 // let user={
