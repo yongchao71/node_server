@@ -2,7 +2,7 @@
  * @Author: ZXY 
  * @Date: 2018-06-01 15:43:54 
  * @Last Modified by: ZXY
- * @Last Modified time: 2018-06-01 22:26:49
+ * @Last Modified time: 2018-06-04 09:56:43
  */
 
 var CONFIGAPI = require("./../config/remoteAPI");
@@ -13,6 +13,11 @@ var Models = require("../models/index");
 
 var express = require('express');
 var router = express.Router();
+router.post('/upload',(req,res,next)=>{
+
+    res.send({ result: "OK" });
+     
+});
 router.get('/sequelizetest', (req, res, next) => {
 
 

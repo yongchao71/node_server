@@ -2,7 +2,7 @@
  * @Author: ZXY 
  * @Date: 2018-03-21 09:14:53 
  * @Last Modified by: ZXY
- * @Last Modified time: 2018-04-15 11:50:31
+ * @Last Modified time: 2018-06-04 09:47:30
  */
 
 var Q = require("q");
@@ -11,7 +11,7 @@ var querystring=require("querystring");
 var request = require("request");
 var loger=require("./loger").loger();
 var cUtils=require("./comUtils");
-var CONSTANT=require("../config/constant");
+var CRESPONSE = require("../common/cresponse");
 /**
  * get请求
  * @param {请求地址，或者请求对象} gurl 
@@ -24,7 +24,8 @@ function Get(gurl,gdata){
     loger.info("-------get url-------",gurl);
     request.get(gurl , function(error , response , body){
         if(error){
-            deferred.resolve([response,CONSTANT.errorCode.requestError]);
+            loger.error("-------get url- error------",error);
+            deferred.resolve([response,CRESPONSE.ERROR.SERVERERROR]);
         }
         else{
             deferred.resolve([response,body]);
@@ -47,10 +48,11 @@ function Post(purl,pdata={}){
         options.url=purl;
         options.form=pdata;
     }
-    loger.info("----------------------->", options);
+
     request.post(options, function(error , response , body){
         if(error){
-            deferred.resolve([response,CONSTANT.errorCode.requestError]);
+            loger.error("---------post----error---------->", error);
+            deferred.resolve([response,CRESPONSE.ERROR.SERVERERROR]);
         }
         else{
             deferred.resolve([response,body]);
@@ -74,10 +76,10 @@ function Request(){
        //body:JSON.stringify(arg.data)
     };
     cUtils.extend(options,oParams);
-    loger.info(JSON.stringify(options));
     request(options , function(error , response , body){
         if(error){
-            deferred.resolve([response,CONSTANT.errorCode.requestError]);
+            loger.error("---------request----error---------->", error);
+            deferred.resolve([response,CRESPONSE.ERROR.SERVERERROR]);
         }
         else{
             deferred.resolve([response,body]);
