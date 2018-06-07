@@ -12,10 +12,15 @@
     "_COMMENT_": "_LOCALPORT_, _ENVIRONMENT_"
   },
   "nodemonConfig": {
-    "ignore": ["logs/*.log","public/*","bootConfig.json","node_modules/*"],
+    "ignore": [
+      "logs/*.log",
+      "public/*",
+      "bootConfig.json",
+      "node_modules/*"
+    ],
     "watch": [],
     "ext": "",
-    "delay":"1000"
+    "delay": "1000"
   },
   "dependencies": {
     "body-parser": "~1.18.2",
@@ -29,15 +34,18 @@
     "log4js": "^2.5.3",
     "morgan": "~1.9.0",
     "ms": "^2.1.1",
+    "multer": "^1.3.0",
     "mysql": "^2.15.0",
     "mysql2": "^1.5.3",
     "q": "^1.5.1",
     "request": "^2.85.0",
+    "restc": "^0.3.2",
     "sequelize": "^4.37.6",
     "sequelize-auto": "^0.4.29",
     "serve-favicon": "~2.4.5"
   },
   "devDependencies": {
+    "chalk": "^2.4.1",
     "nodemon": "^1.17.5"
   }
 }

@@ -8,12 +8,14 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
+
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var resHeader=require('./config/resHeader');
 var registorRoutes=require("./config/registorRoutes");
 
+const restc = require('restc');
 
 const jwt= require('jsonwebtoken');
 const expressJwt = require('express-jwt');
@@ -33,6 +35,7 @@ app.set('view engine', 'ejs');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 let upperBound = '50mb';
+app.use(restc.express());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({limit: upperBound, extended: true, parameterLimit: 100000000}));
 app.use(cookieParser());
