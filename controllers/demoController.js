@@ -2,7 +2,7 @@
  * @Author: ZXY 
  * @Date: 2018-06-01 15:43:54 
  * @Last Modified by: ZXY
- * @Last Modified time: 2018-06-01 22:26:49
+ * @Last Modified time: 2018-06-07 09:30:15
  */
 
 var CONFIGAPI = require("./../config/remoteAPI");
@@ -10,14 +10,41 @@ var httpRequest = require("./../utils/httpRequest");
 var loger = require("../utils/loger").loger();
 var sequelize = require("../dao/sequelize/sqBase").sequelize;
 var Models = require("../models/index");
-
+var multer  = require('multer');
 var express = require('express');
 var router = express.Router();
+var upload = multer({dest: 'public/images/'});
+//upload.any()  upload.single('avatar'),    upload.array('photos', 12) upload.array()
+router.post('/upload', upload.single('test'),(req,res,next)=>{
+ loger.info("req--file--",req.file)
+ loger.info("req----",req.files)
+loger.info("body-----------",req.body);
+    res.send({ result: "OK" });
+     
+});
+
+router.post('/upload2',(req,res,next)=>{
+    loger.info("req--file--",req.file)
+    loger.info("req----",req.files)
+   loger.info("body-----------",req.body);
+   
+   upload.any()(req, res, function (err) {
+        if (err) {
+            return res.end("Something went wrong!");
+        }
+        return res.send({ result: "OK" });
+    });
+
+
+      // res.send({ result: "OK" });
+        
+   });
+
 router.get('/sequelizetest', (req, res, next) => {
 
 
     let user = {
-        Name: "sdf山东饭馆",
+        Name: "北京京民医院",
         Address: "Beijing111北京",
         Email: "EEE@123.com",
         Age: 11

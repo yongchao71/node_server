@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const chalk = require('chalk');
 var loger=require('../../utils/loger').loger();
 const sequelize = new Sequelize('lecanyu', 'root', 'zxy1111', {
   host: 'localhost',
@@ -14,7 +15,7 @@ const sequelize = new Sequelize('lecanyu', 'root', 'zxy1111', {
 }
 });
 sequelize.authenticate().then(() => {
-    loger.info('Connection has been established successfully.');
+    loger.info(chalk.green('Connection has been established successfully.'));
   }).catch(err => {
     loger.error('Unable to connect to the database:', err);
   });
